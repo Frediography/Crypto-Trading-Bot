@@ -74,7 +74,7 @@ def get_settings():
     }
     settings_content = get_json_from_file(settings_file_directory, settings_template)
     if settings_content == settings_template:
-        print("Please completed the `settings.json` file in your `database` directory")
+        print("Please complete the `settings.json` file in your `database` directory")
         exit()
 
     return settings_content
