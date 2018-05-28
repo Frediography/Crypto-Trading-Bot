@@ -32,7 +32,7 @@ def get_secrets():
     }
     secrets_content = get_json_from_file(secrets_file_directory, secrets_template)
     if secrets_content == secrets_template:
-        print("Please completed the `secrets.json` file in your `database` directory")
+        print("Please complete the `secrets.json` file in your `database` directory")
         exit()
 
     return secrets_content
