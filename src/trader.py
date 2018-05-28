@@ -195,7 +195,6 @@ class Trader(object):
         self.Messenger.print_buy(coin_pair, price, stats["rsi"], stats["24HrVolume"])
         self.Messenger.send_buy_slack(coin_pair, stats["rsi"], stats["24HrVolume"])
         self.Messenger.send_buy_gmail(buy_order_data["result"], stats)
-        self.Messenger.play_sw_imperial_march()
 
     def sell(self, coin_pair, price, stats, trade_time_limit=2):
         """
@@ -225,7 +224,6 @@ class Trader(object):
         self.Messenger.print_sell(coin_pair, price, stats["rsi"], stats["profitMargin"])
         self.Messenger.send_sell_slack(coin_pair, stats["rsi"], stats["profitMargin"])
         self.Messenger.send_sell_gmail(sell_order_data["result"], stats)
-        self.Messenger.play_sw_theme()
 
     def get_markets(self, main_market_filter=None):
         """
