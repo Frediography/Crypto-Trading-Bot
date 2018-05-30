@@ -45,7 +45,7 @@ class Trader(object):
             self.Database.resume_sells()
         if "balance" in self.pause_params and self.Database.check_resume(self.pause_params["balance"]["pauseTime"],
                                                                          "balance"):
-            current_balance = self.Messenger.send_balance_slack(self.get_non_zero_balances(),
+            current_balance = self.get_total_balance(self.get_non_zero_balances(),
                                                                 self.Database.get_previous_total_balance())
             self.Database.reset_balance_notifier(current_balance)
 
@@ -193,7 +193,6 @@ class Trader(object):
         self.Database.store_buy(buy_order_data["result"], stats)
 
         self.Messenger.print_buy(coin_pair, price, stats["rsi"], stats["24HrVolume"])
-        self.Messenger.send_buy_gmail(buy_order_data["result"], stats)
 
     def sell(self, coin_pair, price, stats, trade_time_limit=2):
         """
@@ -221,7 +220,6 @@ class Trader(object):
         self.Database.store_sell(sell_order_data["result"], stats)
 
         self.Messenger.print_sell(coin_pair, price, stats["rsi"], stats["profitMargin"])
-        self.Messenger.send_sell_gmail(sell_order_data["result"], stats)
 
     def get_markets(self, main_market_filter=None):
         """
@@ -394,6 +392,22 @@ class Trader(object):
         rs = new_avg_gain / new_avg_loss
         new_rs = 100 - 100 / (1 + rs)
         return new_rs
+
+    def get_total_balance(self, balance_items, previous_total_balance):
+        """
+        Used to return the total balance in BTC value
+
+        :return: The current balance's total BTC value
+        :rtype: float
+        """
+        total_balance = 0
+
+        for balance in balance_items:
+            total_balance += balance["BtcValue"]
+
+        total_balance = round(total_balance, 8)
+
+        return total_balance
 
     def get_non_zero_balances(self):
         """

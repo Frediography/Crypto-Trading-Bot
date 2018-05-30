@@ -15,15 +15,6 @@ class Messenger(object):
     """
 
     def __init__(self, secrets, settings):
-        self.gmail = False
-        if "gmail" in secrets:
-            self.gmail = True
-            self.from_address = secrets["gmail"]["username"]
-            self.to_address_list = secrets["gmail"]["addressList"]
-            self.login = secrets["gmail"]["username"]
-            self.password = secrets["gmail"]["password"]
-            self.recipient_name = secrets["gmail"]["recipientName"]
-            self.smtp_server_address = "smtp.gmail.com:587"
 
         self.sound = False
         if "sound" in settings:
@@ -47,21 +38,6 @@ class Messenger(object):
             }
         }
 
-        self.email_str = {
-            "buy": {
-                "subject": "Crypto Bot: Buy on {} Market",
-                "message": ("Howdy {},\n\nI've just bought {} {} on the {} market - which is currently valued at {} {}."
-                            "\n\nThe market currently has an RSI of {} and a 24 hour market volume of {} {}."
-                            "\n\nHere's a Bittrex URL: {}\n\nRegards,\nCrypto Bot")
-            },
-            "sell": {
-                "subject": "Crypto Bot: Sell on {} Market",
-                "message": ("Howdy {},\n\nI've just sold {} {} on the {} market - which is currently valued at {} {}."
-                            "\n\nThe market currently has an RSI of {} and a {} of {}% was made.\n\n"
-                            "Here's a Bittrex URL: {}\n\nRegards,\nCrypto Bot")
-            }
-        }
-
         self.error_str = {
             "market": "Failed to fetch Bittrex markets.",
             "coinMarket": "Failed to fetch Bittrex market summary for the {} market.",
@@ -80,105 +56,6 @@ class Messenger(object):
 
             "general": "See the latest log file for more information."
         }
-
-    def send_email(self, subject, message):
-        """
-        Used to send an email from the account specified in the secrets.json file to the entire
-        address list specified in the secrets.json file
-
-        :param subject: Email subject
-        :type subject: str
-        :param message: Email content
-        :type message: str
-
-        :return: Errors received from the smtp server (if any)
-        :rtype: dict
-        """
-        if not self.gmail:
-            return
-
-        header = "From: %s\n" % self.from_address
-        header += "To: %s\n" % ",".join(self.to_address_list)
-        header += "Subject: %s\n\n" % subject
-        message = header + message
-
-        server = smtplib.SMTP(self.smtp_server_address)
-        server.starttls()
-        server.login(self.login, self.password)
-        errors = server.sendmail(self.from_address, self.to_address_list, message)
-        server.quit()
-
-        return errors
-
-    def send_buy_gmail(self, order, stats, recipient_name=None):
-        """
-        Used to send a buy specific email from the account specified in the secrets.json file to the entire
-        address list specified in the secrets.json file
-
-        :param order: Bittrex trade object results field
-        :type order: dict
-        :param stats: The stats related to the trade
-        :type stats: dict
-        :param recipient_name: Name of the email"s recipient (ex: John)
-        :type recipient_name: str
-        """
-        if recipient_name is None:
-            recipient_name = self.recipient_name
-        main_market, coin = order["Exchange"].split("-")
-        subject = self.email_str["buy"]["subject"].format(order["Exchange"])
-        message = self.email_str["buy"]["message"].format(
-            recipient_name, round(order["Quantity"], 4), coin, order["Exchange"], order["Price"], main_market,
-            ceil(stats["rsi"]), floor(stats["24HrVolume"]), main_market, self.get_bittrex_URL(order["Exchange"])
-        )
-        self.send_email(subject, message)
-
-    def send_sell_gmail(self, order, stats, recipient_name=None):
-        """
-        Used to send a sell specific email from the account specified in the secrets.json file to the entire
-        address list specified in the secrets.json file
-
-        :param order: Bittrex trade object results field
-        :type order: dict
-        :param stats: The stats related to the trade
-        :type stats: dict
-        :param recipient_name: Name of the email's recipient (ex: John)
-        :type recipient_name: str
-        """
-        if recipient_name is None:
-            recipient_name = self.recipient_name
-
-        type_str = "profit"
-        if stats["profitMargin"] <= 0:
-            type_str = "loss"
-
-        main_market, coin = order["Exchange"].split("-")
-        subject = self.email_str["sell"]["subject"].format(order["Exchange"])
-        message = self.email_str["sell"]["message"].format(
-            recipient_name, round(order["Quantity"], 4), coin, order["Exchange"], order["Price"], main_market,
-            floor(stats["rsi"]), type_str, abs(round(stats["profitMargin"], 2)), self.get_bittrex_URL(order["Exchange"])
-        )
-        self.send_email(subject, message)
-
-    def send_balance_slack(self, balance_items, previous_total_balance):
-        """
-        Used to send a user balance Slack message
-
-        :param balance_items: A list containing all the user's correctly formatted coin balance objects
-        :type balance_items: list
-        :param previous_total_balance: The previous total balance's BTC value
-        :type previous_total_balance: float
-
-        :return: The current balance's total BTC value
-        :rtype: float
-        """
-        total_balance = 0
-
-        for balance in balance_items:
-            total_balance += balance["BtcValue"]
-
-        total_balance = round(total_balance, 8)
-
-        return total_balance
 
     def print_header(self, num_of_coin_pairs):
         """

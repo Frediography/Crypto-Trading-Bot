@@ -15,16 +15,6 @@ def get_secrets():
             "bittrexKey": "BITTREX_API_KEY",
             "bittrexSecret": "BITTREX_SECRET"
         },
-        "gmail": {
-            "recipientName": "Folks",
-            "addressList": [
-                "EXAMPLE_RECIPIENT_1@GMAIL.COM",
-                "EXAMPLE_RECIPIENT_2@GMAIL.COM",
-                "ETC..."
-            ],
-            "username": "EXAMPLE_EMAIL@GMAIL.COM",
-            "password": "GMAIL_PASSWORD"
-        },
     }
     secrets_content = get_json_from_file(secrets_file_directory, secrets_template)
     if secrets_content == secrets_template:
