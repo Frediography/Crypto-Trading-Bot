@@ -27,21 +27,21 @@ def get_secrets():
 def get_settings():
     settings_file_directory = "../database/settings.json"
     settings_template = {
-        "sound": False,
+        "sound": false,
         "tradeParameters": {
-            "tickerInterval": "TICKER_INTERVAL",
+            "tickerInterval": "fiveMin",
             "buy": {
-                "btcAmount": 0,
-                "rsiThreshold": 0,
-                "24HourVolumeThreshold": 0,
-                "minimumUnitPrice": 0,
-                "maxOpenTrades": 0
+                "btcAmount": 0.001,
+                "rsiThreshold": 20,
+                "24HourVolumeThreshold": 25,
+                "minimumUnitPrice": 0.00001,
+                "maxOpenTrades": 3
             },
             "sell": {
-                "lossMarginThreshold": 0,
-                "rsiThreshold": 0,
-                "minProfitMarginThreshold": 0,
-                "profitMarginThreshold": 0
+                "lossMarginThreshold": -2.5,
+                "rsiThreshold": 50,
+                "minProfitMarginThreshold": 0.5,
+                "profitMarginThreshold": 2.5
             }
         },
         "pauseParameters": {
@@ -58,6 +58,7 @@ def get_settings():
             }
         }
     }
+
     settings_content = get_json_from_file(settings_file_directory, settings_template)
     if settings_content == settings_template:
         print("Please complete the `settings.json` file in your `database` directory")
