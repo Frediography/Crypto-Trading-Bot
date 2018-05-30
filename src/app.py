@@ -25,10 +25,6 @@ def get_secrets():
             "username": "EXAMPLE_EMAIL@GMAIL.COM",
             "password": "GMAIL_PASSWORD"
         },
-        "slack": {
-            "channel": "SLACK_CHANNEL",
-            "token": "SLACK_TOKEN"
-        }
     }
     secrets_content = get_json_from_file(secrets_file_directory, secrets_template)
     if secrets_content == secrets_template:
