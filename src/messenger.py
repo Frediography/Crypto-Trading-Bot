@@ -1,6 +1,5 @@
 import smtplib
 import time
-from slackclient import SlackClient
 from termcolor import cprint
 from math import floor, ceil
 
@@ -25,12 +24,6 @@ class Messenger(object):
             self.password = secrets["gmail"]["password"]
             self.recipient_name = secrets["gmail"]["recipientName"]
             self.smtp_server_address = "smtp.gmail.com:587"
-
-        self.slack = False
-        if "slack" in secrets:
-            self.slack = True
-            self.slack_channel = secrets["slack"]["channel"]
-            self.slack_client = SlackClient(secrets["slack"]["token"])
 
         self.sound = False
         if "sound" in settings:
@@ -66,26 +59,6 @@ class Messenger(object):
                 "message": ("Howdy {},\n\nI've just sold {} {} on the {} market - which is currently valued at {} {}."
                             "\n\nThe market currently has an RSI of {} and a {} of {}% was made.\n\n"
                             "Here's a Bittrex URL: {}\n\nRegards,\nCrypto Bot")
-            }
-        }
-
-        self.slack_str = {
-            "buy": {
-                "emoji": ":heavy_minus_sign:",
-                "message": "*Buy on {}*\n>>>\n_RSI: *{}*_\n_24 Hour Volume: *{} {}*_"},
-            "sell": {
-                "profit_emoji": ":heavy_check_mark:",
-                "loss_emoji": ":x:",
-                "message": "*Sell on {}*\n>>>\n_RSI: *{}*_\n_Profit Margin: *{}%*_"
-            },
-            "balance": {
-                "emoji": ":bell:",
-                "header": "*User Balances*\n\n>>>",
-                "subHeader": "\n• *{}*\n",
-                "subHeaderUntracked": "\n• *{} _(Untracked)_*\n",
-                "subHeaderTotal": "\n*_{}_* {}\n",
-                "balance": ">_Balance_: *{} {}*\n",
-                "btcValue": ">_BTC Value_: *{} BTC*\n"
             }
         }
 
@@ -136,22 +109,6 @@ class Messenger(object):
         server.quit()
 
         return errors
-
-    def send_slack(self, message):
-        """
-        Send slack message to notify users
-
-        :param message: The message to send on the slack channel
-        :type message: str
-        """
-        if not self.slack:
-            return
-
-        self.slack_client.api_call(
-            "chat.postMessage",
-            channel=self.slack_channel,
-            text=message
-        )
 
     def send_buy_gmail(self, order, stats, recipient_name=None):
         """
@@ -214,75 +171,14 @@ class Messenger(object):
         :return: The current balance's total BTC value
         :rtype: float
         """
-        slack_emoji = self.slack_str["balance"]["emoji"] * 8 + "\n"
-        slack_message = slack_emoji + self.slack_str["balance"]["header"]
         total_balance = 0
 
         for balance in balance_items:
-            sub_header = self.slack_str["balance"]["subHeader"]
-            if not balance["IsTracked"] and balance["Currency"] != "BTC":
-                sub_header = self.slack_str["balance"]["subHeaderUntracked"]
-            slack_message += sub_header.format(balance["Currency"])
-
-            if balance["Currency"] != "BTC":
-                slack_message += self.slack_str["balance"]["balance"].format(balance["Balance"], balance["Currency"])
-
-            slack_message += self.slack_str["balance"]["btcValue"].format(balance["BtcValue"])
-
             total_balance += balance["BtcValue"]
 
         total_balance = round(total_balance, 8)
-        percentage_change_str = ""
-        if previous_total_balance is not None:
-            percentage_change = round((total_balance - previous_total_balance) * 100 / previous_total_balance, 2)
-            if abs(percentage_change) > 0:
-                icon = "▲ "
-                if percentage_change < 0:
-                    icon = "▼ "
-                percentage_change_str = "_(" + icon + str(abs(percentage_change)) + "%)_"
-        slack_message += self.slack_str["balance"]["subHeaderTotal"].format("Total Balance", percentage_change_str) + (
-            self.slack_str["balance"]["btcValue"].format(round(total_balance, 8))
-        )
 
-        self.send_slack(slack_message)
         return total_balance
-
-    def send_buy_slack(self, coin_pair, rsi, day_volume):
-        """
-        Used to send a buy's Slack message
-
-        :param coin_pair: String literal for the market (ex: BTC-LTC)
-        :type coin_pair: str
-        :param rsi: The coin pair's RSI
-        :type rsi: float
-        :param day_volume: Coin pair's current 24 hour volume
-        :type day_volume: float
-        """
-        main_market, coin = coin_pair.split("-")
-        slack_emoji = self.slack_str["buy"]["emoji"] * 8 + "\n"
-        slack_message = slack_emoji + self.slack_str["buy"]["message"].format(coin_pair, ceil(rsi), floor(day_volume),
-                                                                              main_market)
-        self.send_slack(slack_message)
-
-    def send_sell_slack(self, coin_pair, rsi, profit_margin):
-        """
-        Used to send a sale's Slack message
-
-        :param coin_pair: String literal for the market (ex: BTC-LTC)
-        :type coin_pair: str
-        :param rsi: The coin pair's RSI
-        :type rsi: float
-        :param profit_margin: Profit made on the trade
-        :type profit_margin: float
-        """
-        emoji_type = "profit_emoji"
-        if profit_margin <= 0:
-            emoji_type = "loss_emoji"
-
-        slack_emoji = self.slack_str["sell"][emoji_type] * 8 + "\n"
-        slack_message = slack_emoji + self.slack_str["sell"]["message"].format(coin_pair, floor(rsi),
-                                                                               round(profit_margin, 2))
-        self.send_slack(slack_message)
 
     def print_header(self, num_of_coin_pairs):
         """

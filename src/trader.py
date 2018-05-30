@@ -193,7 +193,6 @@ class Trader(object):
         self.Database.store_buy(buy_order_data["result"], stats)
 
         self.Messenger.print_buy(coin_pair, price, stats["rsi"], stats["24HrVolume"])
-        self.Messenger.send_buy_slack(coin_pair, stats["rsi"], stats["24HrVolume"])
         self.Messenger.send_buy_gmail(buy_order_data["result"], stats)
 
     def sell(self, coin_pair, price, stats, trade_time_limit=2):
@@ -222,7 +221,6 @@ class Trader(object):
         self.Database.store_sell(sell_order_data["result"], stats)
 
         self.Messenger.print_sell(coin_pair, price, stats["rsi"], stats["profitMargin"])
-        self.Messenger.send_sell_slack(coin_pair, stats["rsi"], stats["profitMargin"])
         self.Messenger.send_sell_gmail(sell_order_data["result"], stats)
 
     def get_markets(self, main_market_filter=None):
