@@ -1,0 +1,32 @@
+{
+    "sound": false,
+    "tradeParameters": {
+        "tickerInterval": "fiveMin",
+        "buy": {
+            "btcAmount": 0.001,
+            "rsiThreshold": 20,
+            "24HourVolumeThreshold": 25,
+            "minimumUnitPrice": 0.00001,
+            "maxOpenTrades": 3
+        },
+        "sell": {
+            "lossMarginThreshold": -2.5,
+            "rsiThreshold": 50,
+            "minProfitMarginThreshold": 0.5,
+            "profitMarginThreshold": 2.5
+        }
+    },
+    "pauseParameters": {
+        "buy": {
+            "rsiThreshold": 0,
+            "pauseTime": 0
+        },
+        "sell": {
+            "profitMarginThreshold": 0,
+            "pauseTime": 0
+        },
+        "balance": {
+            "pauseTime": 0
+        }
+    }
+}
