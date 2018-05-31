@@ -27,7 +27,6 @@ def get_secrets():
 def get_settings():
     settings_file_directory = "../database/settings.json"
     settings_template = {
-        "sound": false,
         "tradeParameters": {
             "tickerInterval": "fiveMin",
             "buy": {
