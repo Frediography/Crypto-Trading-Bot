@@ -1,4 +1,3 @@
-import smtplib
 import time
 from termcolor import cprint
 from math import floor, ceil
