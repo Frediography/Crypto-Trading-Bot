@@ -209,7 +209,6 @@ class Messenger(object):
 
         cprint("\n" + error_str + suffix, "red", attrs=["bold"])
         cprint(self.error_str["general"] + "\n", "grey", attrs=["bold"])
-        self.play_beep()
 
         return error_str
 
