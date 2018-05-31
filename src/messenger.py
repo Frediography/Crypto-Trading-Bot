@@ -2,11 +2,6 @@ import time
 from termcolor import cprint
 from math import floor, ceil
 
-try:
-    import winsound
-except ImportError:
-    winsound = None
-
 
 class Messenger(object):
     """
@@ -14,10 +9,6 @@ class Messenger(object):
     """
 
     def __init__(self, secrets, settings):
-
-        self.sound = False
-        if "sound" in settings:
-            self.sound = settings["sound"]
 
         self.header_str = "\nTracking {} Bittrex Markets\n"
 
@@ -227,16 +218,3 @@ class Messenger(object):
         Generates the URL string for the coin pairs Bittrex page
         """
         return self.bittrex_url.format(coin_pair)
-
-    def play_beep(self, frequency=1000, duration=1000):
-        """
-        Used to play a beep sound
-
-        :param frequency: The frequency of the beep
-        :type frequency: int
-        :param duration: The duration of the beep
-        :type duration: int
-        """
-        if not self.sound or winsound is None:
-            return
-        winsound.Beep(frequency, duration)
