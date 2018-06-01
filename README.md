@@ -7,6 +7,7 @@ Taken from https://github.com/JPStrydom/Crypto-Trading-Bot - this is just my ver
 * Eric Somdahl for writing the Python wrapper for the Bittrex API
 * Abenezer Mamo for creating the [Crypto Signals](https://github.com/AbenezerMamo/crypto-signal) project which formed the
 foundation for this project
+* JPStrydom for writing the bot before I started to hack away at it!!!
 
 ## How to setup
 1) This project requires Python 3.X.X, which can be be found [here](https://www.python.org/ftp/python/3.6.3/python-3.6.3.exe).
@@ -28,20 +29,6 @@ run the project without adding this file, the program will create it for you and
 
         *NOTE: The `READ INFO`, `TRADE LIMIT`, and `TRADE MARKET` permissions need to be enabled on your API key in
         order for the trade functionality to be available*
-
-    2) To use the **Gmail** functionality, you need to setup the following:
-        * **`username`** is your Gmail account's username (*usually your account's email address*)
-        * **`password`** is your Gmail account's password
-        * **`address_list`** is the list of recipients you'd like to send emails to
-
-        If you don't want to use the email notifications, you can leave out the `gmail` code.
-
-    3) To use the **Slack** functionality, you need to setup the following:
-        * **`channel`** is your Slack groups's channel (*usually starts with a '#' character*)
-        * **`token`** is your Slack account's authentication token (*you need to create a Slack app on the Slack API website
-        for your group - from which you can generate this authentication token*)
-
-        If you don't want to use the Slack notifications, you can leave out the `slack` code.
 
 4) Add a `settings.json` file to the newly created `database` directory. If you run the project without adding this file,
 the program will create it for you and populate it with the template values.
@@ -88,8 +75,7 @@ the program will create it for you and populate it with the template values.
 Navigate to the `src` file directory in terminal, and run the command `python app.py` to start the trading bot.
 
 ## Trading
-This system allows you to autonomously make and track crypto currency trades on Bittrex. It uses a local database strategy
-to ensure data is not lost.
+This system allows you to autonomously make and track crypto currency trades on Bittrex. It uses a local database strategy to ensure data is not lost.
 
 To use this functionality, first set the desired trade parameters in the `settings.json` file.
 
@@ -149,5 +135,8 @@ def check_sell_parameters(rsi, profit_margin):
 
 See the source code for a more detailed description.
 
-DISCLAIMER
-- THIS SHOULD NOT BE USED WITH REAL MONEY AT ANY TIME - IT'S A PERSONAL PROJECT USING OTHER PEOPLES GOOD WORK TO SEE WHAT HAPPENS, NOT TO MAKE MONEY
+## Disclaimer
+- Do not use this code
+- I am playing with it as a toy only, not to make money
+- Do not try to make money with it
+- Do not use it with real money unless you have changed it to the point it works - which it doesn't right now.
