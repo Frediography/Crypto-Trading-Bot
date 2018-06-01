@@ -102,10 +102,6 @@ following:
         }
     }
     ```
-    1) To use the **Sound** functionality, you need to setup the following:
-         * **`sound`** is a boolean that determines whether audio notifications should be played
-
-        If you don't want to receive audio notifications, you can leave out the `sound` code or set it to `false`.
 
     2) To use the **Trade** functionality, you need to setup the following:
         * **`tickerInterval`** is the exchange ticker interval you want to use. It should be one of the following: `oneMin`,
@@ -236,18 +232,3 @@ def check_sell_parameters(rsi, profit_margin):
 ```
 
 See the source code for a more detailed description.
-
-## Donations
-
-If you found this project helpful and would like to support me, you can donate to one of the following crypto addresses:
-
-* **BTC**: 1E3xMaoFfuk52HaCb7KRbHmezeUumcyRjy
-* **ETH**: 0x6D5f8775Dc844D8B1E6f2359abF9939E75A7A225
-
-
-## Liability
-I am not your financial adviser, nor is this tool. Use this program cautiously as it will trade with your crypto-currencies.
-None of the contributors to this project are liable for any loses you may incur. Be wise and always do your own research.
-
-
-![](https://cdn-images-1.medium.com/max/1600/1*SKlPuk4vscYs3bl1bFdT5g.gif)
