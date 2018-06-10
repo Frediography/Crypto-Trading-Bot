@@ -27,12 +27,19 @@ class Database(object):
                 "pauseTime": {"buy": None, "sell": None, "balance": None},
                 "previousBalance": None
             }
+#            default_failed_trades = {}
+#            default_trade_insights = {}
 
             self.trades_file_string = "../database/trades.json"
             self.app_data_file_string = "../database/app-data.json"
+#            self.failed_trades_file_string = "../database/failed_trades.json"
+#            self.trade_insights_file_string = "../database/trade_insights.json"
 
             self.trades = get_json_from_file(self.trades_file_string, default_trades)
             self.app_data = get_json_from_file(self.app_data_file_string, default_app_data)
+#            self.failed_trades = get_json_from_file(self.failed_trades_file_string, default_failed_trades)
+#            self.trade_insights = get_json_from_file(self.trade_insights_file_string, default_trade_insights)
+
 
         def store_initial_buy(self, coin_pair, buy_order_uuid):
             """
