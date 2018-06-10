@@ -159,7 +159,7 @@ class Messenger(object):
             coin_pair, floor(rsi), round(profit_margin, 2), current_sell_price, self.get_bittrex_URL(coin_pair)
         )
         if print_str != self.console_str["sell"]["previousMessage"]:
-            color = "magenta"
+            color = "green"
             if profit_margin <= 0:
                 color = "red"
             self.console_str["sell"]["previousMessage"] = print_str
