@@ -140,7 +140,7 @@ class Messenger(object):
         print_str = "No " + self.console_str["buy"]["message"].format(
             coin_pair, ceil(rsi), floor(day_volume), main_market, current_buy_price, self.get_bittrex_URL(coin_pair)
         )
-        cprint(print_str, "grey")
+        cprint(print_str, "white")
 
     def print_no_sell(self, coin_pair, rsi, profit_margin, current_sell_price):
         """
