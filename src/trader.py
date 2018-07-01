@@ -124,6 +124,16 @@ class Trader(object):
             self.Database.pause_sell(coin_pair)
         else:
             self.Messenger.print_no_sell(coin_pair, rsi, profit_margin, current_sell_price)
+            #self.Bittrex.get_ticker(coin_pair)
+            #
+            #
+            #
+            # This is the part where we need to add the tracker of detail
+            # Either in database or somewhere else...
+            #
+            #
+            #
+
 
     def check_buy_parameters(self, rsi, day_volume, current_buy_price):
         """
